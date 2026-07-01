@@ -1,0 +1,16 @@
+{
+  "name": "salary-cap-viz",
+  "type": "module",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A gallery of sports salary-cap visualizations, starting with the NBA.",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview"
+  },
+  "dependencies": {
+    "astro": "^5.13.0",
+    "d3": "^7.9.0"
+  }
+}

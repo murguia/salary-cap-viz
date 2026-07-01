@@ -1,0 +1,16 @@
+# dependencies
+node_modules/
+.venv/
+__pycache__/
+*.pyc
+
+# build output
+dist/
+.astro/
+
+# raw scraped data — never commit; only the cleaned dataset in data/nba/ is tracked
+data/raw/
+
+# os / editor
+.DS_Store
+*.log

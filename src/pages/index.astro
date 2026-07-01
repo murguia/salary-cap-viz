@@ -1,0 +1,104 @@
+---
+import Base from '../layouts/Base.astro';
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+
+<Base title="Salary Cap Viz — Gallery">
+  <div class="wrap">
+    <section class="intro">
+      <h1>Salary cap, drawn to scale.</h1>
+      <p>
+        A gallery of visualizations of how professional sports teams spend
+        against the cap. Starting with the NBA.
+      </p>
+    </section>
+
+    <section class="gallery">
+      <a class="card" href={`${base}/nba/salary-treemap`}>
+        <div class="thumb" aria-hidden="true">
+          <span style="grid-area:1/1/3/2;background:var(--red)"></span>
+          <span style="grid-area:1/2/2/4;background:var(--paper)"></span>
+          <span style="grid-area:2/2/4/3;background:var(--blue)"></span>
+          <span style="grid-area:2/3/3/4;background:var(--yellow)"></span>
+          <span style="grid-area:3/1/4/2;background:var(--yellow)"></span>
+          <span style="grid-area:3/3/4/4;background:var(--paper)"></span>
+        </div>
+        <div class="meta">
+          <span class="tag">NBA · 2025-26</span>
+          <h2>Mondrian Payroll Treemap</h2>
+          <p>
+            Every player, every team, sized by salary — grouped into the
+            Eastern and Western conferences. Hover to name the block.
+          </p>
+        </div>
+      </a>
+
+      <div class="card card--soon" aria-disabled="true">
+        <div class="meta">
+          <span class="tag">Coming soon</span>
+          <h2>The cap, over time</h2>
+          <p>The 2016 spike and the 2023 aprons, annotated.</p>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <style>
+    .intro { max-width: 720px; margin-bottom: 36px; }
+    .intro h1 {
+      font-size: clamp(30px, 6vw, 54px);
+      line-height: 1.02;
+      letter-spacing: -0.03em;
+      font-weight: 800;
+      margin: 8px 0 12px;
+    }
+    .intro p { font-size: 18px; color: #333; margin: 0; }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 24px;
+    }
+    .card {
+      border: 4px solid var(--ink);
+      background: #fff;
+      text-decoration: none;
+      color: var(--ink);
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.12s ease, box-shadow 0.12s ease;
+    }
+    a.card:hover {
+      transform: translate(-3px, -3px);
+      box-shadow: 8px 8px 0 var(--ink);
+    }
+    .thumb {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: repeat(3, 1fr);
+      aspect-ratio: 16 / 10;
+      gap: 4px;
+      background: var(--ink);
+      border-bottom: 4px solid var(--ink);
+    }
+    .meta { padding: 16px 18px 20px; }
+    .tag {
+      display: inline-block;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      background: var(--ink);
+      color: var(--paper);
+      padding: 2px 8px;
+    }
+    .meta h2 {
+      font-size: 22px;
+      letter-spacing: -0.02em;
+      margin: 12px 0 6px;
+    }
+    .meta p { margin: 0; color: #444; font-size: 15px; }
+    .card--soon { opacity: 0.55; border-style: dashed; }
+    .card--soon .tag { background: #888; }
+  </style>
+</Base>

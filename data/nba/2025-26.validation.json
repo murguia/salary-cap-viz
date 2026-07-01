@@ -1,0 +1,127 @@
+{
+  "season": "2025-26",
+  "errors": 0,
+  "items": [
+    {
+      "level": "INFO",
+      "check": "teams",
+      "message": "all 30 teams present",
+      "detail": null
+    },
+    {
+      "level": "INFO",
+      "check": "same-team-dupes",
+      "message": "no duplicate rows within a team",
+      "detail": null
+    },
+    {
+      "level": "WARN",
+      "check": "traded-players",
+      "message": "20 players carry cap hits on 2+ teams (mid-season trades / dead money \u2014 verify these are intended)",
+      "detail": {
+        "Blake Wesley": [
+          "WAS $3,347,458",
+          "POR $2,296,274"
+        ],
+        "Bradley Beal": [
+          "LAC $5,354,000",
+          "PHO $19,383,010"
+        ],
+        "Cam Thomas": [
+          "BRK $5,993,172",
+          "MIL $844,607"
+        ],
+        "Charles Bassey": [
+          "PHI $263,940",
+          "MEM $131,970"
+        ],
+        "Cole Anthony": [
+          "PHO $2,296,274",
+          "MEM $3,700,000"
+        ],
+        "Dalano Banton": [
+          "BOS $131,970",
+          "LAC $131,970"
+        ],
+        "Damian Lillard": [
+          "MIL $22,516,603",
+          "POR $14,104,000"
+        ],
+        "Deandre Ayton": [
+          "POR $25,550,814",
+          "LAL $8,104,000"
+        ],
+        "Haywood Highsmith": [
+          "BRK $5,616,000",
+          "PHO $827,984"
+        ],
+        "Jeremiah Robinson-Earl": [
+          "IND $589,305",
+          "DAL $131,970"
+        ],
+        "Jeremy Sochan": [
+          "NYK $778,622",
+          "SAS $7,096,231"
+        ],
+        "Jevon Carter": [
+          "CHI $6,809,524",
+          "ORL $871,000"
+        ],
+        "Jordan Clarkson": [
+          "NYK $2,296,274",
+          "UTA $10,651,561"
+        ],
+        "Kobe Bufkin": [
+          "BRK $4,503,720",
+          "LAL $976,577",
+          "MEM $131,970"
+        ],
+        "Marcus Smart": [
+          "WAS $14,786,855",
+          "LAL $5,134,000"
+        ],
+        "Mason Plumlee": [
+          "OKC $2,296,274",
+          "SAS $725,834"
+        ],
+        "Mike Conley": [
+          "CHO $10,774,038",
+          "MIN $725,834"
+        ],
+        "Mo Bamba": [
+          "TOR $194,771",
+          "UTA $263,940"
+        ],
+        "Patrick Baldwin Jr.": [
+          "PHI $131,970",
+          "LAC $131,970"
+        ],
+        "Rayan Rupert": [
+          "POR $2,221,677",
+          "MEM $131,970"
+        ]
+      }
+    },
+    {
+      "level": "INFO",
+      "check": "salary-bounds",
+      "message": "all salaries within plausible bounds",
+      "detail": null
+    },
+    {
+      "level": "WARN",
+      "check": "roster-size",
+      "message": "BRK has 22 players over $1M (expected 7-20)",
+      "detail": {
+        "total_rows": 29,
+        "significant": 22
+      }
+    },
+    {
+      "level": "INFO",
+      "check": "league-total",
+      "message": "league total $5,601,328,604 within range",
+      "detail": null
+    }
+  ]
+}

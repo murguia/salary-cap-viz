@@ -1,0 +1,112 @@
+---
+export interface Props {
+  title: string;
+  description?: string;
+}
+const { title, description = 'A gallery of sports salary-cap visualizations.' } =
+  Astro.props;
+const base = import.meta.env.BASE_URL;
+const home = base.replace(/\/$/, '') || '/';
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <style is:global>
+      :root {
+        --ink: #161616;
+        --paper: #f4f1e8;
+        --red: #ce2029;
+        --blue: #1f4e9b;
+        --yellow: #f6c700;
+        --grey: #d8d3c4;
+        --rule: 4px solid var(--ink);
+      }
+      * { box-sizing: border-box; }
+      html { -webkit-text-size-adjust: 100%; }
+      body {
+        margin: 0;
+        background: var(--paper);
+        color: var(--ink);
+        font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        line-height: 1.5;
+        -webkit-font-smoothing: antialiased;
+      }
+      a { color: var(--ink); }
+      .wrap { max-width: 1180px; margin: 0 auto; padding: 0 24px; }
+
+      .site-header {
+        border-bottom: 6px solid var(--ink);
+        background: var(--paper);
+      }
+      .site-header .wrap {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 16px;
+        padding-top: 18px;
+        padding-bottom: 14px;
+      }
+      .site-title {
+        font-size: clamp(20px, 3vw, 30px);
+        font-weight: 800;
+        letter-spacing: -0.02em;
+        text-transform: uppercase;
+        text-decoration: none;
+      }
+      .site-title .dot-red { color: var(--red); }
+      .site-title .dot-blue { color: var(--blue); }
+      .site-title .dot-yellow { color: var(--yellow); }
+      .site-nav a {
+        font-weight: 700;
+        text-transform: uppercase;
+        font-size: 13px;
+        letter-spacing: 0.04em;
+        text-decoration: none;
+      }
+      .site-nav a:hover { text-decoration: underline; }
+
+      main { padding: 32px 0 48px; }
+
+      .site-footer {
+        border-top: 6px solid var(--ink);
+        font-size: 13px;
+      }
+      .site-footer .wrap { padding: 18px 24px 40px; }
+      .site-footer p { margin: 4px 0; color: #444; }
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="wrap">
+        <a class="site-title" href={home}>
+          Salary<span class="dot-red">·</span>Cap<span class="dot-blue">·</span>Viz<span class="dot-yellow">.</span>
+        </a>
+        <nav class="site-nav">
+          <a href={home}>Gallery</a>
+        </nav>
+      </div>
+    </header>
+    <main>
+      <slot />
+    </main>
+    <footer class="site-footer">
+      <div class="wrap">
+        <p>
+          A personal, non-commercial gallery of sports salary-cap
+          visualizations.
+        </p>
+        <p>
+          Salary data aggregated from
+          <a href="https://www.basketball-reference.com/">Basketball Reference</a>.
+          Salary-cap figures are public knowledge; this project publishes a
+          derived dataset with attribution.
+        </p>
+      </div>
+    </footer>
+  </body>
+</html>
