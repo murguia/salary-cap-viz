@@ -6,6 +6,8 @@
   "description": "A gallery of sports salary-cap visualizations, starting with the NBA.",
   "scripts": {
     "dev": "astro dev",
+    "gate": "node scripts/check-data-gate.mjs",
+    "prebuild": "node scripts/check-data-gate.mjs",
     "build": "astro build",
     "preview": "astro preview"
   },
