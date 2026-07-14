@@ -100,6 +100,43 @@ const dataJson = JSON.stringify(teams).replace(/</g, '\\u003c');
       return { txt: fmtSigned(TAX - p) + ' below tax', over: false };
     }
 
+    // the roster-building restrictions actually in effect for a given payroll
+    function restrictions(p) {
+      if (p > APRON2)
+        return { tier: 'Second apron — near hard cap', bad: true, items: [
+          'No combining salaries in a trade',
+          'No mid-level exception at all',
+          'Cannot send cash in trades',
+          'Future first-round picks frozen',
+          'Pays luxury tax (steep repeater rates)',
+        ]};
+      if (p > APRON1)
+        return { tier: 'First apron', bad: true, items: [
+          'Taxpayer mid-level only (~$5.7M)',
+          'No sign-and-trade acquisitions',
+          'Cannot take back more salary than sent out',
+          'Pays luxury tax',
+        ]};
+      if (p > TAX)
+        return { tier: 'Luxury-tax payer', bad: true, items: [
+          'Progressive tax on every dollar over the line',
+          'Keeps taxpayer mid-level + trade flexibility',
+        ]};
+      if (p > CAP)
+        return { tier: 'Over the cap (soft)', bad: false, items: [
+          'Can add players only through exceptions',
+          'Bird rights + full mid-level available',
+          'No signings with cap space',
+        ]};
+      if (p >= FLOOR)
+        return { tier: 'Under the cap', bad: false, items: [
+          'Has cap space to sign free agents',
+        ]};
+      return { tier: 'Below the floor', bad: true, items: [
+        'Must spend up to 90% of the cap',
+      ]};
+    }
+
     const svg = d3.select('#chart');
 
     // --- threshold lines + labels ---------------------------------------
@@ -198,6 +235,7 @@ const dataJson = JSON.stringify(teams).replace(/</g, '\\u003c');
       const floorCell = floorD >= 0
         ? `<span class="ok">${fmtSigned(floorD)} above</span>`
         : `<span class="no">${fmtSigned(-floorD)} under</span>`;
+      const restr = restrictions(t.payroll);
       tip.innerHTML =
         `<span class="tt-name">${t.name}</span>` +
         `<span class="tt-pay">${fmtUSD(t.payroll)}</span>` +
@@ -207,7 +245,11 @@ const dataJson = JSON.stringify(teams).replace(/</g, '\\u003c');
         `<tr><td>tax</td><td>${room(t.payroll, TAX)}</td></tr>` +
         `<tr><td>1st apron</td><td>${room(t.payroll, APRON1)}</td></tr>` +
         `<tr><td>2nd apron</td><td>${room(t.payroll, APRON2)}</td></tr>` +
-        `</table>`;
+        `</table>` +
+        `<div class="tt-tier${restr.bad ? ' over' : ''}">${restr.tier}</div>` +
+        `<ul class="tt-restr">` +
+        restr.items.map((it) => `<li>${it}</li>`).join('') +
+        `</ul>`;
       tip.hidden = false;
       const pad = 14;
       const r = tip.getBoundingClientRect();
@@ -254,6 +296,7 @@ const dataJson = JSON.stringify(teams).replace(/</g, '\\u003c');
       box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.15);
       font-family: 'Helvetica Neue', Arial, sans-serif;
       min-width: 190px;
+      max-width: 260px;
     }
     .tt[hidden] { display: none; }
     .tt-name { font-weight: 800; font-size: 15px; display: block; }
@@ -284,5 +327,21 @@ const dataJson = JSON.stringify(teams).replace(/</g, '\\u003c');
     #tooltip td:first-child { color: #666; padding-right: 12px; }
     #tooltip .ok { color: #2f6b34; }
     #tooltip .no { color: #8a2b22; font-weight: 700; }
+    #tooltip .tt-tier {
+      margin-top: 8px;
+      padding-top: 6px;
+      border-top: 1px solid #e0ddd3;
+      font-weight: 800;
+      font-size: 12px;
+    }
+    #tooltip .tt-tier.over { color: #8a2b22; }
+    #tooltip ul.tt-restr {
+      margin: 4px 0 0;
+      padding-left: 15px;
+      font-size: 11px;
+      color: #444;
+      line-height: 1.35;
+    }
+    #tooltip ul.tt-restr li { margin: 1px 0; }
   </style>
 </Base>
