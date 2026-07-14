@@ -13,17 +13,18 @@ const dataJson = JSON.stringify(season).replace(/</g, '\\u003c');
     <p class="kicker">NBA · 2025-26 · in the manner of Edward Tufte</p>
     <h1>Roster construction, team by team</h1>
     <p class="lede">
-      Each row is a team; each dot, a player, placed by salary on one shared
-      scale. Teams are sorted by total payroll. Read across a row to see how a
-      team's money is <em>distributed</em>&#8202;— a lone dot far to the right
-      is a superstar contract; a tight cluster is a balanced roster. Read down
-      a column to compare a salary tier across the league.
+      Each row is a team, sorted by total payroll. On the left, every dot is a
+      player, placed by salary&#8202;— a lone dot far to the right is a
+      superstar contract; a tight cluster is a balanced roster. On the right,
+      one dot marks the team's <em>total</em> payroll against the season's
+      spending thresholds: the salary cap, the luxury-tax line, and the two
+      aprons. A team's dot crossing a line is a team crossing that threshold.
     </p>
 
     <figure class="chart">
       <svg
         id="chart"
-        viewBox="0 0 940 748"
+        viewBox="0 0 1180 756"
         preserveAspectRatio="xMidYMid meet"
         role="img"
         aria-label="Strip plot of 2025-26 NBA player salaries, one row per team, sorted by payroll"
@@ -32,15 +33,18 @@ const dataJson = JSON.stringify(season).replace(/</g, '\\u003c');
 
     <div class="notes">
       <p>
-        The <span class="ink">dark dot</span> on each row marks the team's
-        highest-paid player, labelled directly. Total payrolls in
-        <span class="over">muted red</span> sit above the luxury-tax line
-        ($187.9M). The tick marks along the bottom axis are a
+        In the player strip, the <span class="ink">dark dot</span> on each row
+        marks the team's highest-paid player, labelled directly, and the faint
+        vertical line is the league-median salary. The tick marks below are a
         <em>dot-dash</em> rug&#8202;— the marginal distribution of all
         {season.conferences.reduce((n, c) => n + c.teams.reduce((m, t) => m + t.players.length, 0), 0)}
-        salaries in the league, dense near the minimum and thinning toward the
-        maximum. The faint vertical line marks the league-median salary. Pass
-        the cursor over any dot to name the player.
+        salaries, dense near the minimum and thinning toward the maximum. On
+        the right, the thin vertical lines are the official 2025-26 thresholds
+        &#8212; cap ($155M), luxury tax ($188M), first apron ($196M), second
+        apron ($208M); a payroll dot turns <span class="over">red</span> once a
+        team is into the tax. Nearly every team sits well above the cap; the
+        tax and aprons are where the real spending lines are drawn. Hover any
+        dot for the player or the team total.
       </p>
     </div>
   </article>
@@ -54,8 +58,11 @@ const dataJson = JSON.stringify(season).replace(/</g, '\\u003c');
 
     const raw = JSON.parse(document.getElementById('strip-data').textContent);
 
-    // 2025-26 reference thresholds (official).
+    // 2025-26 reference thresholds (official, team-payroll level).
+    const CAP = 154_647_000;
     const TAX = 187_895_000;
+    const APRON1 = 195_945_000;
+    const APRON2 = 207_824_000;
 
     const teams = raw.conferences
       .flatMap((c) => c.teams)
@@ -71,13 +78,17 @@ const dataJson = JSON.stringify(season).replace(/</g, '\\u003c');
     const minSal = d3.min(all);
 
     // --- geometry (viewBox units) ---------------------------------------
-    const W = 940;
-    const ML = 186; // left gutter: team names
-    const MR = 84; // right gutter: totals
-    const TOP = 58;
+    // Two linked panels sharing one row per team:
+    //   left  = player-salary strip   (per-player scale, $0-$60M)
+    //   right = team-payroll panel    (per-team scale, with cap/tax/apron lines)
+    const W = 1180;
+    const ML = 172; // left gutter: team names
+    const TOP = 66;
     const ROW = 21;
     const plotL = ML;
-    const plotR = W - MR;
+    const plotR = 664; // player-salary strip right edge
+    const payL = 724; // team-payroll panel
+    const payR = 1092;
     const bottomRows = TOP + teams.length * ROW;
     const rugY = bottomRows + 30; // below the rows and the median label
 
@@ -86,13 +97,40 @@ const dataJson = JSON.stringify(season).replace(/</g, '\\u003c');
       .domain([0, Math.ceil(maxSal / 10e6) * 10e6])
       .range([plotL, plotR]);
 
+    // team-payroll scale, padded to a round window around the data
+    const payMin = Math.floor(d3.min(teams, (t) => t.payroll) / 10e6) * 10e6;
+    const payMax = Math.ceil(d3.max(teams, (t) => t.payroll) / 10e6) * 10e6;
+    const xp = d3.scaleLinear().domain([payMin, payMax]).range([payL, payR]);
+    const THRESHOLDS = [
+      { v: CAP, label: 'cap', lower: false, faint: true },
+      { v: TAX, label: 'tax', lower: false, faint: false },
+      { v: APRON1, label: '1st apron', lower: true, faint: false },
+      { v: APRON2, label: '2nd apron', lower: false, faint: false },
+    ];
+
     const fmtM = (s) => '$' + (s / 1e6).toFixed(0) + 'M';
     const fmtUSD = d3.format('$,.0f');
     const lastName = (n) => n.split(' ').slice(-1)[0];
 
     const svg = d3.select('#chart');
 
-    // --- gridlines + top axis labels (range-frame feel: light) ----------
+    // panel headers
+    svg
+      .append('text')
+      .attr('class', 'panel-h')
+      .attr('x', (plotL + plotR) / 2)
+      .attr('y', 20)
+      .attr('text-anchor', 'middle')
+      .text('PLAYER SALARY');
+    svg
+      .append('text')
+      .attr('class', 'panel-h')
+      .attr('x', (payL + payR) / 2)
+      .attr('y', 20)
+      .attr('text-anchor', 'middle')
+      .text('TEAM PAYROLL');
+
+    // --- player-strip gridlines + top axis labels (range-frame feel) ----
     const ticks = x.ticks(6);
     const grid = svg.append('g');
     grid
@@ -102,7 +140,7 @@ const dataJson = JSON.stringify(season).replace(/</g, '\\u003c');
       .attr('class', 'grid')
       .attr('x1', (d) => x(d))
       .attr('x2', (d) => x(d))
-      .attr('y1', TOP - 10)
+      .attr('y1', TOP - 8)
       .attr('y2', bottomRows + 2);
     grid
       .selectAll('text')
@@ -110,17 +148,17 @@ const dataJson = JSON.stringify(season).replace(/</g, '\\u003c');
       .join('text')
       .attr('class', 'axis')
       .attr('x', (d) => x(d))
-      .attr('y', TOP - 16)
+      .attr('y', TOP - 14)
       .attr('text-anchor', 'middle')
       .text((d) => (d === 0 ? '$0' : fmtM(d)));
 
-    // median reference line
+    // median reference line (player strip)
     svg
       .append('line')
       .attr('class', 'median')
       .attr('x1', x(median))
       .attr('x2', x(median))
-      .attr('y1', TOP - 10)
+      .attr('y1', TOP - 8)
       .attr('y2', bottomRows + 2);
     svg
       .append('text')
@@ -129,6 +167,27 @@ const dataJson = JSON.stringify(season).replace(/</g, '\\u003c');
       .attr('y', bottomRows + 2 + 10)
       .attr('text-anchor', 'middle')
       .text('median ' + fmtUSD(median));
+
+    // --- team-payroll threshold lines (cap / tax / aprons) --------------
+    const thr = svg.append('g');
+    THRESHOLDS.forEach((t) => {
+      const tx = xp(t.v);
+      const labelY = t.lower ? 50 : 36; // stagger so close labels don't collide
+      thr
+        .append('line')
+        .attr('class', 'threshold' + (t.faint ? ' faint' : ''))
+        .attr('x1', tx)
+        .attr('x2', tx)
+        .attr('y1', labelY + 3)
+        .attr('y2', bottomRows + 2);
+      thr
+        .append('text')
+        .attr('class', 'thr-label')
+        .attr('x', tx)
+        .attr('y', labelY)
+        .attr('text-anchor', 'middle')
+        .text(t.label + ' $' + Math.round(t.v / 1e6) + 'M');
+    });
 
     // --- rows ------------------------------------------------------------
     const pts = [];
@@ -161,9 +220,19 @@ const dataJson = JSON.stringify(season).replace(/</g, '\\u003c');
         .attr('text-anchor', 'middle')
         .text(lastName(t.top.name));
 
+      // team-payroll dot on the right panel; red once into the tax
+      const pxp = xp(t.payroll);
+      g.append('circle')
+        .attr('class', 'pay-dot')
+        .attr('cx', pxp)
+        .attr('cy', cy)
+        .attr('r', 3)
+        .attr('fill', t.payroll > TAX ? '#8a2b22' : '#33312e');
+      pts.push({ x: pxp, y: cy, team: t.name, payroll: t.payroll, isTeam: true });
+
       g.append('text')
         .attr('class', 'total' + (t.payroll > TAX ? ' over' : ''))
-        .attr('x', W - 10)
+        .attr('x', W - 8)
         .attr('y', cy)
         .attr('text-anchor', 'end')
         .attr('dominant-baseline', 'central')
@@ -208,10 +277,23 @@ const dataJson = JSON.stringify(season).replace(/</g, '\\u003c');
     const tip = document.getElementById('tooltip');
 
     function moveTip(evt, p) {
-      tip.innerHTML =
-        `<span class="tt-name">${p.name}</span>` +
-        `<span class="tt-team">${p.team}</span>` +
-        `<span class="tt-sal">${fmtUSD(p.salary)}</span>`;
+      if (p.isTeam) {
+        const over =
+          p.payroll > APRON2 ? 'over the second apron'
+          : p.payroll > APRON1 ? 'over the first apron'
+          : p.payroll > TAX ? 'in the luxury tax'
+          : p.payroll > CAP ? 'over the cap' : 'under the cap';
+        tip.innerHTML =
+          `<span class="tt-name">${p.team}</span>` +
+          `<span class="tt-team">total payroll</span>` +
+          `<span class="tt-sal">${fmtUSD(p.payroll)}</span>` +
+          `<span class="tt-team">${over}</span>`;
+      } else {
+        tip.innerHTML =
+          `<span class="tt-name">${p.name}</span>` +
+          `<span class="tt-team">${p.team}</span>` +
+          `<span class="tt-sal">${fmtUSD(p.salary)}</span>`;
+      }
       tip.hidden = false;
       const pad = 14;
       const r = tip.getBoundingClientRect();
@@ -274,21 +356,9 @@ const dataJson = JSON.stringify(season).replace(/</g, '\\u003c');
     .chart { margin: 0; }
     #chart { width: 100%; height: auto; display: block; }
 
-    /* SVG element styling */
-    .tufte svg text { font-family: Palatino, 'Palatino Linotype', Georgia, serif; }
-    .team { font-size: 11.5px; fill: #111; }
-    .total { font-size: 11.5px; fill: #6b6659; }
-    .total.over { fill: #8a2b22; }
-    .toplabel { font-size: 8.5px; font-style: italic; fill: #4a463d; }
-    .axis { font-size: 10px; fill: #8a8266; }
-    .reflabel { font-size: 9.5px; font-style: italic; fill: #a39a78; }
-    .dot { fill: #3a3730; opacity: 0.42; }
-    .top-dot { fill: #111; }
-    .grid { stroke: #ece7d6; stroke-width: 1; shape-rendering: crispEdges; }
-    .median { stroke: #cfc59b; stroke-width: 1; stroke-dasharray: 2 3; }
-    .frame { stroke: #6b6659; stroke-width: 1; shape-rendering: crispEdges; }
-    .rugtick { stroke: #3a3730; opacity: 0.3; stroke-width: 1; }
-    .focus { fill: none; stroke: #8a2b22; stroke-width: 1.5; }
+    /* NOTE: SVG element styling lives in the `is:global` block below, because
+       these elements are created by D3 at runtime and never receive Astro's
+       scoped-style attribute. */
 
     .notes {
       border-top: 1px solid #e6e0cf;
@@ -322,5 +392,28 @@ const dataJson = JSON.stringify(season).replace(/</g, '\\u003c');
     .tt-name { font-size: 14px; font-weight: 600; }
     .tt-team { font-size: 12px; font-style: italic; color: #6b6659; }
     .tt-sal { font-size: 14px; margin-top: 2px; }
+  </style>
+
+  <!-- D3 creates these SVG nodes at runtime, so they miss Astro's scoped
+       attribute. Styled globally but namespaced under #chart (this page only). -->
+  <style is:global>
+    #chart text { font-family: Palatino, 'Palatino Linotype', Georgia, serif; }
+    #chart .panel-h { font-size: 10px; letter-spacing: 0.1em; fill: #a89f7a; }
+    #chart .team { font-size: 11.5px; fill: #111; }
+    #chart .total { font-size: 11.5px; fill: #6b6659; }
+    #chart .total.over { fill: #8a2b22; }
+    #chart .threshold { stroke: #a2925c; stroke-width: 1; shape-rendering: crispEdges; }
+    #chart .threshold.faint { stroke: #cabf98; stroke-dasharray: 2 3; }
+    #chart .thr-label { font-size: 9px; font-style: italic; fill: #9a8f6b; }
+    #chart .toplabel { font-size: 8.5px; font-style: italic; fill: #4a463d; }
+    #chart .axis { font-size: 10px; fill: #8a8266; }
+    #chart .reflabel { font-size: 9.5px; font-style: italic; fill: #a39a78; }
+    #chart .dot { fill: #3a3730; opacity: 0.42; }
+    #chart .top-dot { fill: #111; }
+    #chart .grid { stroke: #ece7d6; stroke-width: 1; shape-rendering: crispEdges; }
+    #chart .median { stroke: #cfc59b; stroke-width: 1; stroke-dasharray: 2 3; }
+    #chart .frame { stroke: #6b6659; stroke-width: 1; shape-rendering: crispEdges; }
+    #chart .rugtick { stroke: #3a3730; opacity: 0.3; stroke-width: 1; }
+    #chart .focus { fill: none; stroke: #8a2b22; stroke-width: 1.5; }
   </style>
 </Base>
