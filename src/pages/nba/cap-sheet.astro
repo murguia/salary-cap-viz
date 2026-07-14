@@ -1,0 +1,278 @@
+---
+import Base from '../../layouts/Base.astro';
+import season from '../../../data/nba/2025-26.json';
+import teamColors from '../../../data/nba/team-colors.json';
+
+const cmap = teamColors.colors;
+const teams = season.conferences
+  .flatMap((c) => c.teams)
+  .map((t) => ({
+    name: t.name,
+    bbref: t.bbref,
+    payroll: t.payroll,
+    color: cmap[t.bbref] || '#666666',
+  }))
+  .sort((a, b) => b.payroll - a.payroll);
+
+const dataJson = JSON.stringify(teams).replace(/</g, '\\u003c');
+---
+
+<Base
+  title="NBA Cap Sheet 2025-26 — Salary Cap Viz"
+  description="Team-colored blocks showing each NBA team's payroll against the cap, luxury tax, and both aprons — and the room left before each line."
+>
+  <div class="wrap">
+    <header class="head">
+      <span class="tag">NBA · 2025-26</span>
+      <h1>Cap Sheet: room before the lines</h1>
+      <p class="lede">
+        One block per team, in team colors, on a shared payroll scale. The
+        <strong>solid</strong> block is committed salary; the
+        <strong>faded</strong> block is the room left before the second apron.
+        The vertical lines are the four thresholds — <strong>salary cap</strong>,
+        <strong>luxury tax</strong>, <strong>first apron</strong>,
+        <strong>second apron</strong>. A block reaching past a line is a team
+        over that threshold. (Nearly everyone clears the cap; the tax and aprons
+        are the real dividers, so the axis starts near the cap.)
+      </p>
+    </header>
+
+    <figure class="chart-figure">
+      <svg
+        id="chart"
+        viewBox="0 0 1120 792"
+        preserveAspectRatio="xMidYMid meet"
+        role="img"
+        aria-label="Bar chart of 2025-26 NBA team payrolls against the cap, tax, and apron thresholds"
+      ></svg>
+    </figure>
+  </div>
+
+  <div id="tooltip" class="tt" hidden></div>
+
+  <script id="cap-data" type="application/json" set:html={dataJson} is:inline></script>
+
+  <script>
+    import * as d3 from 'd3';
+
+    const teams = JSON.parse(document.getElementById('cap-data').textContent);
+
+    // official 2025-26 thresholds (team-payroll level)
+    const CAP = 154_647_000;
+    const TAX = 187_895_000;
+    const APRON1 = 195_945_000;
+    const APRON2 = 207_824_000;
+
+    const W = 1120;
+    const ML = 178; // team names
+    const MR = 150; // right-side status
+    const TOP = 74;
+    const ROW = 22;
+    const BAR = 13;
+    const plotL = ML;
+    const plotR = W - MR;
+    const bottomRows = TOP + teams.length * ROW;
+
+    const xMin = 148_000_000;
+    const xMax = 216_000_000;
+    const x = d3.scaleLinear().domain([xMin, xMax]).range([plotL, plotR]);
+
+    const fmtSigned = (n) =>
+      (n >= 0 ? '$' : '−$') + Math.abs(n / 1e6).toFixed(1) + 'M';
+    const fmtUSD = d3.format('$,.0f');
+
+    const THRESHOLDS = [
+      { v: CAP, label: 'cap', lower: false },
+      { v: TAX, label: 'luxury tax', lower: false },
+      { v: APRON1, label: '1st apron', lower: true },
+      { v: APRON2, label: '2nd apron', lower: false },
+    ];
+
+    // per-team status relative to the nearest threshold it has crossed
+    function status(p) {
+      if (p > APRON2) return { txt: fmtSigned(p - APRON2) + ' over 2nd apron', over: true };
+      if (p > APRON1) return { txt: fmtSigned(p - APRON1) + ' over 1st apron', over: true };
+      if (p > TAX) return { txt: fmtSigned(p - TAX) + ' into the tax', over: true };
+      return { txt: fmtSigned(TAX - p) + ' below tax', over: false };
+    }
+
+    const svg = d3.select('#chart');
+
+    // --- threshold lines + labels ---------------------------------------
+    const thr = svg.append('g');
+    THRESHOLDS.forEach((t) => {
+      const tx = x(t.v);
+      const labelY = t.lower ? 52 : 38;
+      thr
+        .append('line')
+        .attr('x1', tx).attr('x2', tx)
+        .attr('y1', labelY + 3).attr('y2', bottomRows + 4)
+        .attr('stroke', '#151515').attr('stroke-width', 1)
+        .attr('shape-rendering', 'crispEdges');
+      thr
+        .append('text')
+        .attr('class', 'thr-label')
+        .attr('x', tx).attr('y', labelY)
+        .attr('text-anchor', 'middle')
+        .text(t.label + ' $' + Math.round(t.v / 1e6) + 'M');
+    });
+
+    // axis: a light baseline + a couple of ticks for the truncated scale
+    svg
+      .append('text')
+      .attr('class', 'axis-note')
+      .attr('x', plotL).attr('y', bottomRows + 22)
+      .text('scale begins at $' + xMin / 1e6 + 'M');
+
+    // --- rows ------------------------------------------------------------
+    const rows = svg.append('g');
+    teams.forEach((t, i) => {
+      const cy = TOP + i * ROW + ROW / 2;
+      const y = cy - BAR / 2;
+      const g = rows.append('g').style('cursor', 'crosshair');
+
+      // full-row hit area (transparent) for hover
+      g.append('rect')
+        .attr('x', 0).attr('y', cy - ROW / 2)
+        .attr('width', W).attr('height', ROW)
+        .attr('fill', 'transparent');
+
+      g.append('text')
+        .attr('class', 'team')
+        .attr('x', ML - 12).attr('y', cy)
+        .attr('text-anchor', 'end').attr('dominant-baseline', 'central')
+        .text(t.name);
+
+      // faded "room" block: from payroll up to the 2nd apron (if under it)
+      if (t.payroll < APRON2) {
+        g.append('rect')
+          .attr('x', x(t.payroll)).attr('y', y)
+          .attr('width', x(APRON2) - x(t.payroll)).attr('height', BAR)
+          .attr('fill', t.color).attr('opacity', 0.16);
+      }
+
+      // solid committed-payroll block
+      g.append('rect')
+        .attr('x', plotL).attr('y', y)
+        .attr('width', Math.max(0, x(t.payroll) - plotL)).attr('height', BAR)
+        .attr('fill', t.color);
+
+      const st = status(t.payroll);
+      g.append('text')
+        .attr('class', 'status' + (st.over ? ' over' : ' under'))
+        .attr('x', W - 8).attr('y', cy)
+        .attr('text-anchor', 'end').attr('dominant-baseline', 'central')
+        .text(st.txt);
+    });
+
+    // redraw threshold lines on top of the bars (thin, so they read through)
+    THRESHOLDS.forEach((t) => {
+      const tx = x(t.v);
+      const labelY = t.lower ? 52 : 38;
+      thr
+        .append('line')
+        .attr('x1', tx).attr('x2', tx)
+        .attr('y1', labelY + 3).attr('y2', bottomRows + 4)
+        .attr('stroke', '#151515').attr('stroke-width', 1)
+        .attr('stroke-opacity', 0.9)
+        .attr('shape-rendering', 'crispEdges');
+    });
+
+    // --- hover -----------------------------------------------------------
+    const tip = document.getElementById('tooltip');
+    function room(p, v) {
+      const d = v - p;
+      return d >= 0
+        ? `<span class="ok">${fmtSigned(d)} below</span>`
+        : `<span class="no">${fmtSigned(-d)} over</span>`;
+    }
+    rows.selectAll('g').on('mousemove', function (evt) {
+      const i = rows.selectAll('g').nodes().indexOf(this);
+      const t = teams[i];
+      tip.innerHTML =
+        `<span class="tt-name">${t.name}</span>` +
+        `<span class="tt-pay">${fmtUSD(t.payroll)}</span>` +
+        `<table>` +
+        `<tr><td>cap</td><td>${room(t.payroll, CAP)}</td></tr>` +
+        `<tr><td>tax</td><td>${room(t.payroll, TAX)}</td></tr>` +
+        `<tr><td>1st apron</td><td>${room(t.payroll, APRON1)}</td></tr>` +
+        `<tr><td>2nd apron</td><td>${room(t.payroll, APRON2)}</td></tr>` +
+        `</table>`;
+      tip.hidden = false;
+      const pad = 14;
+      const r = tip.getBoundingClientRect();
+      let lx = evt.clientX + pad;
+      let ly = evt.clientY + pad;
+      if (lx + r.width > window.innerWidth - 8) lx = evt.clientX - r.width - pad;
+      if (ly + r.height > window.innerHeight - 8) ly = evt.clientY - r.height - pad;
+      tip.style.left = lx + 'px';
+      tip.style.top = ly + 'px';
+    });
+    rows.on('mouseleave', () => (tip.hidden = true));
+  </script>
+
+  <style>
+    .head { max-width: 820px; margin-bottom: 20px; }
+    .tag {
+      display: inline-block;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      background: var(--ink);
+      color: var(--paper);
+      padding: 2px 8px;
+    }
+    .head h1 {
+      font-size: clamp(26px, 4.5vw, 42px);
+      letter-spacing: -0.02em;
+      line-height: 1.05;
+      margin: 12px 0 10px;
+    }
+    .lede { font-size: 17px; color: #333; margin: 0; }
+    .chart-figure { margin: 0; }
+    #chart { width: 100%; height: auto; display: block; }
+
+    .tt {
+      position: fixed;
+      z-index: 10;
+      pointer-events: none;
+      background: #fff;
+      color: var(--ink);
+      border: 2px solid var(--ink);
+      padding: 8px 10px;
+      box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.15);
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      min-width: 190px;
+    }
+    .tt[hidden] { display: none; }
+    .tt-name { font-weight: 800; font-size: 15px; display: block; }
+    .tt-pay { font-size: 14px; font-weight: 700; display: block; margin: 1px 0 6px; }
+    .tt table { border-collapse: collapse; font-size: 12px; width: 100%; }
+    .tt td { padding: 1px 0; }
+    .tt td:first-child { color: #666; padding-right: 12px; }
+    .tt .ok { color: #2f6b34; }
+    .tt .no { color: #8a2b22; font-weight: 700; }
+  </style>
+
+  <!-- D3 builds these SVG text nodes at runtime, so they miss Astro's scoped
+       attribute; style globally, namespaced under #chart (this page only). -->
+  <style is:global>
+    #chart text { font-family: 'Helvetica Neue', Arial, sans-serif; }
+    #chart .team { font-size: 11.5px; fill: #151515; }
+    #chart .thr-label { font-size: 10px; fill: #151515; font-weight: 700; }
+    #chart .status { font-size: 11px; }
+    #chart .status.over { fill: #8a2b22; font-weight: 700; }
+    #chart .status.under { fill: #2f6b34; }
+    #chart .axis-note { font-size: 10px; fill: #999; font-style: italic; }
+
+    /* tooltip inner nodes are injected via innerHTML at runtime -> also global */
+    #tooltip .tt-name { font-weight: 800; font-size: 15px; display: block; }
+    #tooltip .tt-pay { font-size: 14px; font-weight: 700; display: block; margin: 1px 0 6px; }
+    #tooltip table { border-collapse: collapse; font-size: 12px; width: 100%; }
+    #tooltip td { padding: 1px 0; }
+    #tooltip td:first-child { color: #666; padding-right: 12px; }
+    #tooltip .ok { color: #2f6b34; }
+    #tooltip .no { color: #8a2b22; font-weight: 700; }
+  </style>
+</Base>

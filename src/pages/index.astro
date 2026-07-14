@@ -45,6 +45,24 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
         </div>
       </a>
 
+      <a class="card" href={`${base}/nba/cap-sheet`}>
+        <div class="thumb thumb--cap" aria-hidden="true">
+          <span style="width:82%;background:#860038"></span>
+          <span style="width:64%;background:#1D428A"></span>
+          <span style="width:91%;background:#552583"></span>
+          <span style="width:47%;background:#007A33"></span>
+          <span style="width:73%;background:#CE1141"></span>
+        </div>
+        <div class="meta">
+          <span class="tag">NBA · 2025-26</span>
+          <h2>Cap Sheet</h2>
+          <p>
+            Team-colored blocks against the cap, tax, and both aprons — who's
+            capped out and who still has room.
+          </p>
+        </div>
+      </a>
+
       <div class="card card--soon" aria-disabled="true">
         <div class="meta">
           <span class="tag">Coming soon</span>
@@ -100,6 +118,15 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
       background-size: 15px 26px;
       background-position: 8px 12px;
     }
+    .thumb--cap {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 7px;
+      padding: 18px;
+      background: #fff;
+    }
+    .thumb--cap span { height: 12px; display: block; }
     .meta { padding: 16px 18px 20px; }
     .tag {
       display: inline-block;
