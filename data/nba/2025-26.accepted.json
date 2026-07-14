@@ -1,0 +1,26 @@
+{
+  "season": "2025-26",
+  "_comment": "Human-verified resolutions of cross-source team conflicts. Each entry signs off on one player: `team` is the verified-correct bbref team. crosscheck.py treats a conflict as reconciled (not a gate-blocking flag) when the player is listed here. If `team` matches the BBR snapshot, our data is already correct (ESPN was stale); if it matches ESPN, the snapshot is WRONG and needs correcting — crosscheck will flag that loudly. `basis`: 'verified' = explicitly confirmed; 'trust-bbr-unverified' = blanket sign-off trusting our published source, not individually checked (revisit if a source correction surfaces).",
+  "accepted": [
+    {
+      "player": "Anthony Davis",
+      "team": "WAS",
+      "basis": "verified",
+      "verified": "2026-07-14",
+      "note": "AD is on Washington this season — BBR is correct, ESPN is stale."
+    },
+    { "player": "Lonzo Ball",        "team": "UTA", "basis": "trust-bbr-unverified", "note": "ESPN says CLE; trusting BBR, not individually verified." },
+    { "player": "D'Angelo Russell",  "team": "WAS", "basis": "trust-bbr-unverified", "note": "ESPN says DAL; trusting BBR, not individually verified." },
+    { "player": "Dario Šarić",       "team": "DET", "basis": "trust-bbr-unverified", "note": "ESPN says SAC; trusting BBR, not individually verified." },
+    { "player": "Malaki Branham",    "team": "CHO", "basis": "trust-bbr-unverified", "note": "ESPN says WAS; trusting BBR, not individually verified." },
+    { "player": "Eric Gordon",       "team": "MEM", "basis": "trust-bbr-unverified", "note": "ESPN says PHI; trusting BBR, not individually verified." },
+    { "player": "Dillon Jones",      "team": "WAS", "basis": "trust-bbr-unverified", "note": "ESPN says NYK; trusting BBR, not individually verified." },
+    { "player": "Chris Paul",        "team": "TOR", "basis": "trust-bbr-unverified", "note": "ESPN says LAC; trusting BBR, not individually verified." },
+    { "player": "Chris Boucher",     "team": "UTA", "basis": "trust-bbr-unverified", "note": "ESPN says BOS; trusting BBR, not individually verified." },
+    { "player": "Nigel Hayes-Davis", "team": "MIL", "basis": "trust-bbr-unverified", "note": "ESPN says PHO; trusting BBR, not individually verified." },
+    { "player": "Hunter Tyson",      "team": "BRK", "basis": "trust-bbr-unverified", "note": "ESPN says DEN; trusting BBR, not individually verified." },
+    { "player": "Duop Reath",        "team": "ATL", "basis": "trust-bbr-unverified", "note": "ESPN says POR; trusting BBR, not individually verified." },
+    { "player": "Drew Timme",        "team": "BRK", "basis": "trust-bbr-unverified", "note": "ESPN says LAL; trusting BBR, not individually verified." },
+    { "player": "Tyler Smith",       "team": "MIL", "basis": "trust-bbr-unverified", "note": "ESPN says DAL; trusting BBR, not individually verified." }
+  ]
+}

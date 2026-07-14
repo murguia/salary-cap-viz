@@ -3,8 +3,8 @@
   "sport": "NBA",
   "source": "Basketball Reference (basketball-reference.com)",
   "sourceNote": "Player salaries scraped from team season pages. Aggregated for a personal, non-commercial visualization.",
-  "retrieved": "2026-07-01",
-  "totalPayroll": 5601328604,
+  "retrieved": "2026-07-14",
+  "totalPayroll": 5614138731,
   "conferences": [
     {
       "name": "Eastern",
@@ -13,7 +13,7 @@
           "bbref": "BOS",
           "name": "Boston Celtics",
           "division": "Atlantic",
-          "payroll": 189528566,
+          "payroll": 190155989,
           "players": [
             {
               "name": "Jayson Tatum",
@@ -40,7 +40,7 @@
               "salary": 7232143
             },
             {
-              "name": "Hugo Gonz\u00e1lez",
+              "name": "Hugo Gonz\u00e1lez Pe\u00f1a",
               "salary": 2783880
             },
             {
@@ -68,8 +68,20 @@
               "salary": 490128
             },
             {
+              "name": "Max Shulga",
+              "salary": 212145
+            },
+            {
+              "name": "Charles Bassey",
+              "salary": 263940
+            },
+            {
               "name": "Dalano Banton",
-              "salary": 131970
+              "salary": 160263
+            },
+            {
+              "name": "Ron Harper",
+              "salary": 123045
             },
             {
               "name": "John Tonje",
@@ -81,10 +93,10 @@
           "bbref": "BRK",
           "name": "Brooklyn Nets",
           "division": "Atlantic",
-          "payroll": 154565214,
+          "payroll": 154704205,
           "players": [
             {
-              "name": "Michael Porter Jr.",
+              "name": "Michael Porter",
               "salary": 38333050
             },
             {
@@ -188,12 +200,12 @@
               "salary": 85300
             },
             {
-              "name": "Grant Nelson",
-              "salary": 73153
+              "name": "Malachi Smith",
+              "salary": 254794
             },
             {
-              "name": "Malachi Smith",
-              "salary": 115803
+              "name": "Grant Nelson",
+              "salary": 73153
             },
             {
               "name": "Terry Roberts",
@@ -273,7 +285,7 @@
           "bbref": "PHI",
           "name": "Philadelphia 76ers",
           "division": "Atlantic",
-          "payroll": 193379238,
+          "payroll": 193505169,
           "players": [
             {
               "name": "Joel Embiid",
@@ -296,7 +308,7 @@
               "salary": 8741209
             },
             {
-              "name": "Kelly Oubre Jr.",
+              "name": "Kelly Oubre",
               "salary": 8382150
             },
             {
@@ -336,12 +348,16 @@
               "salary": 712637
             },
             {
+              "name": "Patrick Baldwin",
+              "salary": 131970
+            },
+            {
               "name": "Charles Bassey",
               "salary": 263940
             },
             {
-              "name": "Patrick Baldwin Jr.",
-              "salary": 131970
+              "name": "Dalen Terry",
+              "salary": 125931
             },
             {
               "name": "Emoni Bates",
@@ -353,7 +369,7 @@
           "bbref": "TOR",
           "name": "Toronto Raptors",
           "division": "Atlantic",
-          "payroll": 186760175,
+          "payroll": 186969746,
           "players": [
             {
               "name": "Scottie Barnes",
@@ -404,7 +420,7 @@
               "salary": 2221677
             },
             {
-              "name": "Jamal Shead",
+              "name": "Jamison Battle",
               "salary": 1955377
             },
             {
@@ -412,12 +428,24 @@
               "salary": 1955377
             },
             {
-              "name": "Jamison Battle",
+              "name": "Jamal Shead",
               "salary": 1955377
             },
             {
-              "name": "Mo Bamba",
+              "name": "Mohamed Bamba",
               "salary": 194771
+            },
+            {
+              "name": "Markelle Fultz",
+              "salary": 131970
+            },
+            {
+              "name": "Tyreke Key",
+              "salary": 51207
+            },
+            {
+              "name": "A.J. Lawson",
+              "salary": 26394
             }
           ]
         },
@@ -501,7 +529,7 @@
           "bbref": "CLE",
           "name": "Cleveland Cavaliers",
           "division": "Central",
-          "payroll": 212140929,
+          "payroll": 212404326,
           "players": [
             {
               "name": "Donovan Mitchell",
@@ -513,7 +541,7 @@
             },
             {
               "name": "James Harden",
-              "salary": 39182693
+              "salary": 39446090
             },
             {
               "name": "Jarrett Allen",
@@ -544,7 +572,7 @@
               "salary": 2301587
             },
             {
-              "name": "Larry Nance Jr.",
+              "name": "Larry Nance",
               "salary": 2296274
             },
             {
@@ -552,7 +580,7 @@
               "salary": 2296274
             },
             {
-              "name": "Craig Porter Jr.",
+              "name": "Craig Porter",
               "salary": 2221677
             },
             {
@@ -573,7 +601,7 @@
           "bbref": "DET",
           "name": "Detroit Pistons",
           "division": "Central",
-          "payroll": 185911869,
+          "payroll": 185982507,
           "players": [
             {
               "name": "Cade Cunningham",
@@ -642,6 +670,10 @@
             {
               "name": "Chaz Lanier",
               "salary": 1372870
+            },
+            {
+              "name": "Tolu Smith",
+              "salary": 70638
             }
           ]
         },
@@ -649,7 +681,7 @@
           "bbref": "IND",
           "name": "Indiana Pacers",
           "division": "Central",
-          "payroll": 188691507,
+          "payroll": 189293060,
           "players": [
             {
               "name": "Tyrese Haliburton",
@@ -716,6 +748,10 @@
               "salary": 1131970
             },
             {
+              "name": "Quenton Jackson",
+              "salary": 601553
+            },
+            {
               "name": "Jeremiah Robinson-Earl",
               "salary": 589305
             },
@@ -745,7 +781,7 @@
           "bbref": "MIL",
           "name": "Milwaukee Bucks",
           "division": "Central",
-          "payroll": 181349997,
+          "payroll": 181949997,
           "players": [
             {
               "name": "Giannis Antetokounmpo",
@@ -772,7 +808,7 @@
               "salary": 6670882
             },
             {
-              "name": "Kevin Porter Jr.",
+              "name": "Kevin Porter",
               "salary": 5134000
             },
             {
@@ -780,7 +816,7 @@
               "salary": 4000000
             },
             {
-              "name": "Gary Trent Jr.",
+              "name": "Gary Trent",
               "salary": 3697105
             },
             {
@@ -800,15 +836,15 @@
               "salary": 2301587
             },
             {
-              "name": "Chris Livingston",
-              "salary": 2296274
-            },
-            {
               "name": "Thanasis Antetokounmpo",
               "salary": 2296274
             },
             {
-              "name": "Andre Jackson Jr.",
+              "name": "Chris Livingston",
+              "salary": 2296274
+            },
+            {
+              "name": "Andre Jackson",
               "salary": 2221677
             },
             {
@@ -826,6 +862,10 @@
             {
               "name": "Vasilije Mici\u0107",
               "salary": 666667
+            },
+            {
+              "name": "Pete Nance",
+              "salary": 600000
             }
           ]
         },
@@ -833,7 +873,7 @@
           "bbref": "ATL",
           "name": "Atlanta Hawks",
           "division": "Southeast",
-          "payroll": 186522162,
+          "payroll": 186614541,
           "players": [
             {
               "name": "CJ McCollum",
@@ -880,19 +920,19 @@
               "salary": 3237480
             },
             {
-              "name": "Jock Landale",
-              "salary": 2296274
-            },
-            {
               "name": "Keaton Wallace",
               "salary": 2296274
             },
             {
-              "name": "Duop Reath",
-              "salary": 2221677
+              "name": "Jock Landale",
+              "salary": 2296274
             },
             {
               "name": "Mouhamed Gueye",
+              "salary": 2221677
+            },
+            {
+              "name": "Duop Reath",
               "salary": 2221677
             },
             {
@@ -906,6 +946,10 @@
             {
               "name": "Caleb Houstan",
               "salary": 699440
+            },
+            {
+              "name": "Tony Bradley",
+              "salary": 92379
             }
           ]
         },
@@ -968,11 +1012,11 @@
               "salary": 2763960
             },
             {
-              "name": "Nick Smith Jr.",
+              "name": "Nick Smith",
               "salary": 2710680
             },
             {
-              "name": "Xavier Tillman Sr.",
+              "name": "Xavier Tillman",
               "salary": 2546675
             },
             {
@@ -993,7 +1037,7 @@
           "bbref": "MIA",
           "name": "Miami Heat",
           "division": "Southeast",
-          "payroll": 186447146,
+          "payroll": 186470692,
           "players": [
             {
               "name": "Bam Adebayo",
@@ -1032,7 +1076,7 @@
               "salary": 4443360
             },
             {
-              "name": "Jaime Jaquez Jr.",
+              "name": "Jaime Jaquez",
               "salary": 3861600
             },
             {
@@ -1044,16 +1088,20 @@
               "salary": 2378870
             },
             {
-              "name": "Pelle Larsson",
+              "name": "Keshad Johnson",
               "salary": 1955377
             },
             {
-              "name": "Keshad Johnson",
+              "name": "Pelle Larsson",
               "salary": 1955377
             },
             {
               "name": "Myron Gardner",
               "salary": 395029
+            },
+            {
+              "name": "Jahmir Young",
+              "salary": 23546
             }
           ]
         },
@@ -1061,7 +1109,7 @@
           "bbref": "ORL",
           "name": "Orlando Magic",
           "division": "Southeast",
-          "payroll": 187342232,
+          "payroll": 187670352,
           "players": [
             {
               "name": "Franz Wagner",
@@ -1084,7 +1132,7 @@
               "salary": 15000000
             },
             {
-              "name": "Wendell Carter Jr.",
+              "name": "Wendell Carter",
               "salary": 10850000
             },
             {
@@ -1118,6 +1166,10 @@
             {
               "name": "Jevon Carter",
               "salary": 871000
+            },
+            {
+              "name": "Jamal Cain",
+              "salary": 328120
             }
           ]
         },
@@ -1125,7 +1177,7 @@
           "bbref": "WAS",
           "name": "Washington Wizards",
           "division": "Southeast",
-          "payroll": 182463635,
+          "payroll": 186452748,
           "players": [
             {
               "name": "Anthony Davis",
@@ -1180,6 +1232,10 @@
               "salary": 2966760
             },
             {
+              "name": "Tristan Vukcevic",
+              "salary": 2857143
+            },
+            {
               "name": "Dillon Jones",
               "salary": 2753280
             },
@@ -1194,6 +1250,10 @@
             {
               "name": "Dant\u00e9 Exum",
               "salary": 2296274
+            },
+            {
+              "name": "Jamir Watkins",
+              "salary": 1131970
             },
             {
               "name": "Skal Labissi\u00e8re",
@@ -1222,7 +1282,7 @@
           "bbref": "DEN",
           "name": "Denver Nuggets",
           "division": "Northwest",
-          "payroll": 186699349,
+          "payroll": 187214031,
           "players": [
             {
               "name": "Nikola Joki\u0107",
@@ -1269,7 +1329,7 @@
               "salary": 2296274
             },
             {
-              "name": "Tim Hardaway Jr.",
+              "name": "Tim Hardaway",
               "salary": 2296274
             },
             {
@@ -1279,6 +1339,10 @@
             {
               "name": "Spencer Jones",
               "salary": 623967
+            },
+            {
+              "name": "Tyus Jones",
+              "salary": 514682
             }
           ]
         },
@@ -1286,7 +1350,7 @@
           "bbref": "MIN",
           "name": "Minnesota Timberwolves",
           "division": "Northwest",
-          "payroll": 193475172,
+          "payroll": 194042642,
           "players": [
             {
               "name": "Anthony Edwards",
@@ -1321,7 +1385,7 @@
               "salary": 4201080
             },
             {
-              "name": "Terrence Shannon Jr.",
+              "name": "Terrence Shannon",
               "salary": 2674080
             },
             {
@@ -1343,6 +1407,10 @@
             {
               "name": "Mike Conley",
               "salary": 725834
+            },
+            {
+              "name": "Kyle Anderson",
+              "salary": 567470
             }
           ]
         },
@@ -1493,7 +1561,7 @@
               "salary": 686243
             },
             {
-              "name": "Didi Louzada",
+              "name": "Marcos Louzada Silva",
               "salary": 268032
             }
           ]
@@ -1502,14 +1570,14 @@
           "bbref": "UTA",
           "name": "Utah Jazz",
           "division": "Northwest",
-          "payroll": 172574640,
+          "payroll": 173117343,
           "players": [
             {
               "name": "Lauri Markkanen",
               "salary": 46394100
             },
             {
-              "name": "Jaren Jackson Jr.",
+              "name": "Jaren Jackson",
               "salary": 35000000
             },
             {
@@ -1565,7 +1633,7 @@
               "salary": 2638200
             },
             {
-              "name": "Vince Williams Jr.",
+              "name": "Vince Williams",
               "salary": 2301587
             },
             {
@@ -1573,8 +1641,24 @@
               "salary": 2296274
             },
             {
-              "name": "Mo Bamba",
+              "name": "Mohamed Bamba",
               "salary": 263940
+            },
+            {
+              "name": "Kennedy Chandler",
+              "salary": 235460
+            },
+            {
+              "name": "Andersson Garcia",
+              "salary": 73153
+            },
+            {
+              "name": "Bez Mbeng",
+              "salary": 219459
+            },
+            {
+              "name": "Hayden Gray",
+              "salary": 14631
             }
           ]
         },
@@ -1582,7 +1666,7 @@
           "bbref": "GSW",
           "name": "Golden State Warriors",
           "division": "Pacific",
-          "payroll": 204744987,
+          "payroll": 205114503,
           "players": [
             {
               "name": "Stephen Curry",
@@ -1617,7 +1701,7 @@
               "salary": 3080921
             },
             {
-              "name": "Gary Payton II",
+              "name": "Gary Payton",
               "salary": 2296274
             },
             {
@@ -1639,6 +1723,14 @@
             {
               "name": "Pat Spencer",
               "salary": 857804
+            },
+            {
+              "name": "Omer Yurtseven",
+              "salary": 263940
+            },
+            {
+              "name": "Charles Bassey",
+              "salary": 105576
             }
           ]
         },
@@ -1665,7 +1757,7 @@
               "salary": 16020000
             },
             {
-              "name": "Derrick Jones Jr.",
+              "name": "Derrick Jones",
               "salary": 10000000
             },
             {
@@ -1709,11 +1801,11 @@
               "salary": 475497
             },
             {
-              "name": "Patrick Baldwin Jr.",
+              "name": "Dalano Banton",
               "salary": 131970
             },
             {
-              "name": "Dalano Banton",
+              "name": "Patrick Baldwin",
               "salary": 131970
             }
           ]
@@ -1722,7 +1814,7 @@
           "bbref": "LAL",
           "name": "Los Angeles Lakers",
           "division": "Pacific",
-          "payroll": 195297382,
+          "payroll": 195310579,
           "players": [
             {
               "name": "LeBron James",
@@ -1783,6 +1875,10 @@
             {
               "name": "Kobe Bufkin",
               "salary": 976577
+            },
+            {
+              "name": "Nick Smith",
+              "salary": 13197
             }
           ]
         },
@@ -1790,7 +1886,7 @@
           "bbref": "PHO",
           "name": "Phoenix Suns",
           "division": "Pacific",
-          "payroll": 186292926,
+          "payroll": 186867136,
           "players": [
             {
               "name": "Devin Booker",
@@ -1841,11 +1937,11 @@
               "salary": 2296274
             },
             {
-              "name": "Cole Anthony",
+              "name": "Amir Coffey",
               "salary": 2296274
             },
             {
-              "name": "Amir Coffey",
+              "name": "Cole Anthony",
               "salary": 2296274
             },
             {
@@ -1863,6 +1959,10 @@
             {
               "name": "E.J. Liddell",
               "salary": 706898
+            },
+            {
+              "name": "Jamaree Bouyea",
+              "salary": 574210
             }
           ]
         },
@@ -1870,7 +1970,7 @@
           "bbref": "SAC",
           "name": "Sacramento Kings",
           "division": "Pacific",
-          "payroll": 186219931,
+          "payroll": 186796559,
           "players": [
             {
               "name": "Zach LaVine",
@@ -1909,11 +2009,11 @@
               "salary": 2296274
             },
             {
-              "name": "Doug McDermott",
+              "name": "Russell Westbrook",
               "salary": 2296274
             },
             {
-              "name": "Russell Westbrook",
+              "name": "Doug McDermott",
               "salary": 2296274
             },
             {
@@ -1926,7 +2026,11 @@
             },
             {
               "name": "Killian Hayes",
-              "salary": 263940
+              "salary": 708598
+            },
+            {
+              "name": "DaQuan Jeffries",
+              "salary": 131970
             }
           ]
         },
@@ -1934,7 +2038,7 @@
           "bbref": "DAL",
           "name": "Dallas Mavericks",
           "division": "Southwest",
-          "payroll": 182455744,
+          "payroll": 182777619,
           "players": [
             {
               "name": "Kyrie Irving",
@@ -1977,7 +2081,7 @@
               "salary": 7000000
             },
             {
-              "name": "Dereck Lively II",
+              "name": "Dereck Lively",
               "salary": 5253360
             },
             {
@@ -1989,7 +2093,7 @@
               "salary": 3090480
             },
             {
-              "name": "Marvin Bagley III",
+              "name": "Marvin Bagley",
               "salary": 2296274
             },
             {
@@ -2005,6 +2109,10 @@
               "salary": 1002360
             },
             {
+              "name": "Ryan Nembhard",
+              "salary": 321875
+            },
+            {
               "name": "Jeremiah Robinson-Earl",
               "salary": 131970
             }
@@ -2014,7 +2122,7 @@
           "bbref": "HOU",
           "name": "Houston Rockets",
           "division": "Southwest",
-          "payroll": 194689411,
+          "payroll": 194771441,
           "players": [
             {
               "name": "Kevin Durant",
@@ -2037,7 +2145,7 @@
               "salary": 12700000
             },
             {
-              "name": "Jabari Smith Jr.",
+              "name": "Jabari Smith",
               "salary": 12350392
             },
             {
@@ -2071,6 +2179,10 @@
             {
               "name": "Josh Okogie",
               "salary": 2296274
+            },
+            {
+              "name": "JD Davison",
+              "salary": 82030
             }
           ]
         },
@@ -2078,7 +2190,7 @@
           "bbref": "MEM",
           "name": "Memphis Grizzlies",
           "division": "Southwest",
-          "payroll": 156465265,
+          "payroll": 158642419,
           "players": [
             {
               "name": "Ja Morant",
@@ -2137,16 +2249,24 @@
               "salary": 2296274
             },
             {
-              "name": "Scotty Pippen Jr.",
+              "name": "Scotty Pippen",
               "salary": 2270735
             },
             {
-              "name": "GG Jackson II",
+              "name": "Gregory Jackson",
               "salary": 2221677
             },
             {
               "name": "Jaylen Wells",
               "salary": 1955377
+            },
+            {
+              "name": "Taj Gibson",
+              "salary": 960753
+            },
+            {
+              "name": "Olivier-Maxence Prosper",
+              "salary": 527879
             },
             {
               "name": "Mamadi Diakite",
@@ -2157,11 +2277,11 @@
               "salary": 131970
             },
             {
-              "name": "Kobe Bufkin",
+              "name": "Dariq Whitehead",
               "salary": 131970
             },
             {
-              "name": "Christian Koloko",
+              "name": "DeJon Jarreau",
               "salary": 263940
             },
             {
@@ -2169,8 +2289,20 @@
               "salary": 131970
             },
             {
+              "name": "Christian Koloko",
+              "salary": 263940
+            },
+            {
+              "name": "Kobe Bufkin",
+              "salary": 131970
+            },
+            {
               "name": "Lawson Lovering",
               "salary": 87784
+            },
+            {
+              "name": "Tyler Burton",
+              "salary": 146306
             },
             {
               "name": "Adama-Alpha Bal",
@@ -2178,7 +2310,11 @@
             },
             {
               "name": "Lucas Williamson",
-              "salary": 21946
+              "salary": 95099
+            },
+            {
+              "name": "Toby Okani",
+              "salary": 73153
             }
           ]
         },
@@ -2201,7 +2337,7 @@
               "salary": 30801103
             },
             {
-              "name": "Trey Murphy III",
+              "name": "Trey Murphy",
               "salary": 25000000
             },
             {
@@ -2317,7 +2453,7 @@
               "salary": 2296274
             },
             {
-              "name": "Lindy Waters III",
+              "name": "Lindy Waters",
               "salary": 2296274
             },
             {

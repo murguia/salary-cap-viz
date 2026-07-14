@@ -2,8 +2,8 @@
   "season": "2025-26",
   "source_b": "ESPN /year/2026",
   "espn_rows": 475,
-  "confirmed": 434,
-  "fuzzy_matched": 1,
+  "confirmed": 446,
+  "fuzzy_matched": 2,
   "reconciled_trade": [
     {
       "player": "Cole Anthony",
@@ -14,141 +14,108 @@
       ]
     }
   ],
-  "unreconciled": [
+  "accepted_conflicts": [
     {
       "player": "Anthony Davis",
-      "espn_team": "DAL",
+      "verified_team": "WAS",
       "bbr_team": "WAS",
-      "espn_salary": 54126450,
-      "bbr_salary": 54126450
+      "espn_team": "DAL",
+      "note": "AD is on Washington this season \u2014 BBR is correct, ESPN is stale."
     },
     {
       "player": "Lonzo Ball",
-      "espn_team": "CLE",
+      "verified_team": "UTA",
       "bbr_team": "UTA",
-      "espn_salary": 10000000,
-      "bbr_salary": 10000000
+      "espn_team": "CLE",
+      "note": "ESPN says CLE; trusting BBR, not individually verified."
     },
     {
       "player": "D'Angelo Russell",
-      "espn_team": "DAL",
+      "verified_team": "WAS",
       "bbr_team": "WAS",
-      "espn_salary": 5685000,
-      "bbr_salary": 5685000
+      "espn_team": "DAL",
+      "note": "ESPN says DAL; trusting BBR, not individually verified."
     },
     {
       "player": "Dario \u0160ari\u0107",
-      "espn_team": "SAC",
+      "verified_team": "DET",
       "bbr_team": "DET",
-      "espn_salary": 5426000,
-      "bbr_salary": 5426400
+      "espn_team": "SAC",
+      "note": "ESPN says SAC; trusting BBR, not individually verified."
     },
     {
       "player": "Malaki Branham",
-      "espn_team": "WAS",
+      "verified_team": "CHO",
       "bbr_team": "CHO",
-      "espn_salary": 4962033,
-      "bbr_salary": 4962033
+      "espn_team": "WAS",
+      "note": "ESPN says WAS; trusting BBR, not individually verified."
     },
     {
       "player": "Eric Gordon",
-      "espn_team": "PHI",
+      "verified_team": "MEM",
       "bbr_team": "MEM",
-      "espn_salary": 3468960,
-      "bbr_salary": 2296274
-    },
-    {
-      "player": "Dariq Whitehead",
-      "espn_team": "MEM",
-      "bbr_team": "BRK",
-      "espn_salary": 3262560,
-      "bbr_salary": 3262560
+      "espn_team": "PHI",
+      "note": "ESPN says PHI; trusting BBR, not individually verified."
     },
     {
       "player": "Dillon Jones",
-      "espn_team": "NYK",
+      "verified_team": "WAS",
       "bbr_team": "WAS",
-      "espn_salary": 2753280,
-      "bbr_salary": 2753280
+      "espn_team": "NYK",
+      "note": "ESPN says NYK; trusting BBR, not individually verified."
     },
     {
       "player": "Chris Paul",
-      "espn_team": "LAC",
+      "verified_team": "TOR",
       "bbr_team": "TOR",
-      "espn_salary": 2296274,
-      "bbr_salary": 2296274
+      "espn_team": "LAC",
+      "note": "ESPN says LAC; trusting BBR, not individually verified."
     },
     {
       "player": "Chris Boucher",
-      "espn_team": "BOS",
+      "verified_team": "UTA",
       "bbr_team": "UTA",
-      "espn_salary": 2296274,
-      "bbr_salary": 2296274
+      "espn_team": "BOS",
+      "note": "ESPN says BOS; trusting BBR, not individually verified."
     },
     {
       "player": "Nigel Hayes-Davis",
-      "espn_team": "PHO",
+      "verified_team": "MIL",
       "bbr_team": "MIL",
-      "espn_salary": 2296274,
-      "bbr_salary": 2048494
-    },
-    {
-      "player": "JD Davison",
-      "espn_team": "HOU",
-      "bbr_team": "BOS",
-      "espn_salary": 2270735,
-      "bbr_salary": 2270735
+      "espn_team": "PHO",
+      "note": "ESPN says PHO; trusting BBR, not individually verified."
     },
     {
       "player": "Hunter Tyson",
-      "espn_team": "DEN",
+      "verified_team": "BRK",
       "bbr_team": "BRK",
-      "espn_salary": 2221677,
-      "bbr_salary": 2221677
+      "espn_team": "DEN",
+      "note": "ESPN says DEN; trusting BBR, not individually verified."
     },
     {
       "player": "Duop Reath",
-      "espn_team": "POR",
+      "verified_team": "ATL",
       "bbr_team": "ATL",
-      "espn_salary": 2221677,
-      "bbr_salary": 2221677
+      "espn_team": "POR",
+      "note": "ESPN says POR; trusting BBR, not individually verified."
     },
     {
       "player": "Drew Timme",
-      "espn_team": "LAL",
+      "verified_team": "BRK",
       "bbr_team": "BRK",
-      "espn_salary": 1955377,
-      "bbr_salary": 1955377
+      "espn_team": "LAL",
+      "note": "ESPN says LAL; trusting BBR, not individually verified."
     },
     {
       "player": "Tyler Smith",
-      "espn_team": "DAL",
+      "verified_team": "MIL",
       "bbr_team": "MIL",
-      "espn_salary": 1955377,
-      "bbr_salary": 1955377
-    },
-    {
-      "player": "Kyle Anderson",
-      "espn_team": "MIN",
-      "bbr_team": "MEM",
-      "espn_salary": 567470,
-      "bbr_salary": 9219512
-    },
-    {
-      "player": "Olivier-Maxence Prosper",
-      "espn_team": "MEM",
-      "bbr_team": "DAL",
-      "espn_salary": 527879,
-      "bbr_salary": 1002360
-    },
-    {
-      "player": "Tyus Jones",
-      "espn_team": "DEN",
-      "bbr_team": "DAL",
-      "espn_salary": 514682,
-      "bbr_salary": 7000000
+      "espn_team": "DAL",
+      "note": "ESPN says DAL; trusting BBR, not individually verified."
     }
   ],
+  "data_wrong": [],
+  "unreconciled": [],
   "salary_diffs": [
     {
       "player": "Luka Don\u010di\u0107",
@@ -211,6 +178,12 @@
       "espn": 7000000
     },
     {
+      "player": "DaQuan Jeffries",
+      "team": "SAC",
+      "bbref": 131970,
+      "espn": 2743776
+    },
+    {
       "player": "James Wiseman",
       "team": "IND",
       "bbref": 1131970,
@@ -229,6 +202,12 @@
       "espn": 2349578
     },
     {
+      "player": "A.J. Lawson",
+      "team": "TOR",
+      "bbref": 26394,
+      "espn": 2270735
+    },
+    {
       "player": "Pat Connaughton",
       "team": "CHO",
       "bbref": 10739683,
@@ -244,32 +223,11 @@
       "salary": 2296274
     },
     {
-      "player": "JaVale McGee",
+      "player": "Hugo Gonz\u00e1lez Pe\u00f1a",
       "teams": [
-        "DAL"
+        "BOS"
       ],
-      "salary": 2208856
-    },
-    {
-      "player": "Tyrese Martin",
-      "teams": [
-        "BRK"
-      ],
-      "salary": 2191897
-    },
-    {
-      "player": "Nick Smith Jr.",
-      "teams": [
-        "CHO"
-      ],
-      "salary": 2710680
-    },
-    {
-      "player": "Nikola Djurisic",
-      "teams": [
-        "ATL"
-      ],
-      "salary": 1272870
+      "salary": 2783880
     },
     {
       "player": "Rayan Rupert",
@@ -280,15 +238,16 @@
       "salary": 2221677
     },
     {
-      "player": "Aaron Holiday",
+      "player": "JaVale McGee",
       "teams": [
-        "HOU"
+        "DAL"
       ],
-      "salary": 2296274
+      "salary": 2208856
     },
     {
       "player": "Tony Bradley",
       "teams": [
+        "ATL",
         "IND"
       ],
       "salary": 3204816
@@ -301,11 +260,41 @@
       "salary": 3107143
     },
     {
+      "player": "Tyrese Martin",
+      "teams": [
+        "BRK"
+      ],
+      "salary": 2191897
+    },
+    {
       "player": "Dalen Terry",
       "teams": [
-        "NOP"
+        "NOP",
+        "PHI"
       ],
       "salary": 5399118
+    },
+    {
+      "player": "Nikola Djurisic",
+      "teams": [
+        "ATL"
+      ],
+      "salary": 1272870
+    },
+    {
+      "player": "Nick Smith",
+      "teams": [
+        "CHO",
+        "LAL"
+      ],
+      "salary": 2710680
+    },
+    {
+      "player": "Aaron Holiday",
+      "teams": [
+        "HOU"
+      ],
+      "salary": 2296274
     }
   ],
   "only_in_espn": [
@@ -328,16 +317,10 @@
       "team_full": "Los Angeles Lakers"
     },
     {
-      "team": "WAS",
-      "salary": 2857143,
-      "display": "Tristan Vukcevic , F",
-      "team_full": "Washington Wizards"
-    },
-    {
-      "team": "SAC",
-      "salary": 2743776,
-      "display": "DaQuan Jeffries , G",
-      "team_full": "Sacramento Kings"
+      "team": "BOS",
+      "salary": 2783880,
+      "display": "Hugo Gonzalez , G",
+      "team_full": "Boston Celtics"
     },
     {
       "team": "SAC",
@@ -362,12 +345,6 @@
       "salary": 2271677,
       "display": "Maxwell Lewis , F",
       "team_full": "Brooklyn Nets"
-    },
-    {
-      "team": "TOR",
-      "salary": 2270735,
-      "display": "A.J. Lawson , G",
-      "team_full": "Toronto Raptors"
     },
     {
       "team": "PHI",
@@ -400,40 +377,10 @@
       "team_full": "Atlanta Hawks"
     },
     {
-      "team": "WAS",
-      "salary": 1131970,
-      "display": "Jamir Watkins , G",
-      "team_full": "Washington Wizards"
-    },
-    {
-      "team": "MEM",
-      "salary": 960753,
-      "display": "Taj Gibson , F",
-      "team_full": "Memphis Grizzlies"
-    },
-    {
       "team": "SAC",
       "salary": 871000,
       "display": "Dylan Cardwell , C",
       "team_full": "Sacramento Kings"
-    },
-    {
-      "team": "IND",
-      "salary": 601553,
-      "display": "Quenton Jackson , G",
-      "team_full": "Indiana Pacers"
-    },
-    {
-      "team": "PHO",
-      "salary": 574210,
-      "display": "Jamaree Bouyea , G",
-      "team_full": "Phoenix Suns"
-    },
-    {
-      "team": "DAL",
-      "salary": 321875,
-      "display": "Ryan Nembhard , G",
-      "team_full": "Dallas Mavericks"
     }
   ],
   "unmapped_espn_teams": []

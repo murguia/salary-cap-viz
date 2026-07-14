@@ -157,6 +157,13 @@ def main() -> int:
     end_year = season_end_year(args.season)
     snapshot = json.load(open(NBA_DIR / f"{args.season}.json", encoding="utf-8"))
     team_meta = json.load(open(NBA_DIR / "teams.json", encoding="utf-8"))["teams"]
+
+    # Human-verified conflict resolutions (optional): norm name -> {team, note}.
+    accepted_path = NBA_DIR / f"{args.season}.accepted.json"
+    accepted = {}
+    if accepted_path.exists():
+        for a in json.load(open(accepted_path, encoding="utf-8"))["accepted"]:
+            accepted[norm_name(a["player"])] = a
     team_by_norm = {norm_team(t["name"]): t["bbref"] for t in team_meta}
     team_by_norm.update(TEAM_ALIASES)
     valid_abbr = {t["bbref"] for t in team_meta}
@@ -193,6 +200,8 @@ def main() -> int:
     confirmed = []          # ESPN team is among BBR's teams for the player
     reconciled_trade = []   # mismatch, but player is multi-team in BBR (trade)
     unreconciled = []       # ESPN team NOT in BBR's set -> real flag to VERIFY
+    accepted_conflicts = [] # unreconciled, but signed off in the accept-list
+    data_wrong = []         # accepted where the verified team != our BBR data
     salary_diffs = []       # same single team, salary off beyond tolerance
 
     def compare(bbr_teams, display, espn_rec):
@@ -210,11 +219,23 @@ def main() -> int:
                 {"player": display, "espn_team": espn_rec["team"],
                  "bbr_teams": sorted(bbr_teams)})
         else:
-            unreconciled.append(
-                {"player": display, "espn_team": espn_rec["team"],
-                 "bbr_team": next(iter(bbr_teams)),
-                 "espn_salary": espn_rec["salary"],
-                 "bbr_salary": next(iter(bbr_teams.values()))})
+            bbr_team = next(iter(bbr_teams))
+            acc = accepted.get(norm_name(display))
+            if acc:
+                entry = {"player": display, "verified_team": acc["team"],
+                         "bbr_team": bbr_team, "espn_team": espn_rec["team"],
+                         "note": acc.get("note", "")}
+                accepted_conflicts.append(entry)
+                # If the human-verified team isn't what our snapshot shows,
+                # our published data is wrong and must be corrected.
+                if acc["team"] != bbr_team:
+                    data_wrong.append(entry)
+            else:
+                unreconciled.append(
+                    {"player": display, "espn_team": espn_rec["team"],
+                     "bbr_team": bbr_team,
+                     "espn_salary": espn_rec["salary"],
+                     "bbr_salary": next(iter(bbr_teams.values()))})
 
     # phase 1: exact normalized-name match
     espn_unmatched = {}
@@ -271,6 +292,15 @@ def main() -> int:
                       f"(${u['espn_salary']:,})")
     else:
         line("✓", "UNRECONCILED team mismatches: 0")
+    if accepted_conflicts:
+        line("✓", f"conflicts signed off in accept-list: {len(accepted_conflicts)}")
+        for a in accepted_conflicts:
+            tag = "our data CORRECT" if a["verified_team"] == a["bbr_team"] \
+                else f"our data WRONG — should be {a['verified_team']}"
+            line(" ", f"    {a['player']}: verified {a['verified_team']} ({tag})")
+    if data_wrong:
+        line("✗", f"accepted but OUR DATA IS WRONG (fix the snapshot): "
+                  f"{len(data_wrong)}")
     if salary_diffs:
         line("!", f"salary discrepancies >2% (same team): {len(salary_diffs)}")
         for s in sorted(salary_diffs, key=lambda x: -abs(x['bbref'] - x['espn']))[:15]:
@@ -285,7 +315,7 @@ def main() -> int:
     for o in sorted(only_espn, key=lambda x: -x['salary'])[:10]:
         line(" ", f"    {o['display']} ({o['team']}) ${o['salary']:,}")
 
-    n_flags = len(unreconciled) + len(unmapped_teams)
+    n_flags = len(unreconciled) + len(unmapped_teams) + len(data_wrong)
     print(f"\nESPN players matched: {len(confirmed) + len(reconciled_trade) + len(unreconciled)}"
           f" / {len(espn)} · unreconciled flags: {len(unreconciled)}", file=sys.stderr)
 
@@ -294,6 +324,7 @@ def main() -> int:
         "espn_rows": len(espn_rows),
         "confirmed": len(confirmed), "fuzzy_matched": fuzzy_matched,
         "reconciled_trade": reconciled_trade,
+        "accepted_conflicts": accepted_conflicts, "data_wrong": data_wrong,
         "unreconciled": unreconciled, "salary_diffs": salary_diffs,
         "only_in_bbr_significant": only_bbr_sig, "only_in_espn": only_espn,
         "unmapped_espn_teams": sorted(unmapped_teams),

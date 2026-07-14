@@ -17,7 +17,7 @@
     {
       "level": "WARN",
       "check": "traded-players",
-      "message": "20 players carry cap hits on 2+ teams (mid-season trades / dead money \u2014 verify these are intended)",
+      "message": "28 players carry cap hits on 2+ teams (mid-season trades / dead money \u2014 verify these are intended)",
       "detail": {
         "Blake Wesley": [
           "WAS $3,347,458",
@@ -32,7 +32,9 @@
           "MIL $844,607"
         ],
         "Charles Bassey": [
+          "BOS $263,940",
           "PHI $263,940",
+          "GSW $105,576",
           "MEM $131,970"
         ],
         "Cole Anthony": [
@@ -40,12 +42,20 @@
           "MEM $3,700,000"
         ],
         "Dalano Banton": [
-          "BOS $131,970",
+          "BOS $160,263",
           "LAC $131,970"
+        ],
+        "Dalen Terry": [
+          "PHI $125,931",
+          "NOP $5,399,118"
         ],
         "Damian Lillard": [
           "MIL $22,516,603",
           "POR $14,104,000"
+        ],
+        "Dariq Whitehead": [
+          "BRK $3,262,560",
+          "MEM $131,970"
         ],
         "Deandre Ayton": [
           "POR $25,550,814",
@@ -54,6 +64,10 @@
         "Haywood Highsmith": [
           "BRK $5,616,000",
           "PHO $827,984"
+        ],
+        "JD Davison": [
+          "BOS $2,270,735",
+          "HOU $82,030"
         ],
         "Jeremiah Robinson-Earl": [
           "IND $589,305",
@@ -76,6 +90,10 @@
           "LAL $976,577",
           "MEM $131,970"
         ],
+        "Kyle Anderson": [
+          "MIN $567,470",
+          "MEM $9,219,512"
+        ],
         "Marcus Smart": [
           "WAS $14,786,855",
           "LAL $5,134,000"
@@ -88,17 +106,33 @@
           "CHO $10,774,038",
           "MIN $725,834"
         ],
-        "Mo Bamba": [
+        "Mohamed Bamba": [
           "TOR $194,771",
           "UTA $263,940"
         ],
-        "Patrick Baldwin Jr.": [
+        "Nick Smith": [
+          "CHO $2,710,680",
+          "LAL $13,197"
+        ],
+        "Olivier-Maxence Prosper": [
+          "DAL $1,002,360",
+          "MEM $527,879"
+        ],
+        "Patrick Baldwin": [
           "PHI $131,970",
           "LAC $131,970"
         ],
         "Rayan Rupert": [
           "POR $2,221,677",
           "MEM $131,970"
+        ],
+        "Tony Bradley": [
+          "IND $3,204,816",
+          "ATL $92,379"
+        ],
+        "Tyus Jones": [
+          "DEN $514,682",
+          "DAL $7,000,000"
         ]
       }
     },
@@ -120,7 +154,7 @@
     {
       "level": "INFO",
       "check": "league-total",
-      "message": "league total $5,601,328,604 within range",
+      "message": "league total $5,614,138,731 within range",
       "detail": null
     }
   ]

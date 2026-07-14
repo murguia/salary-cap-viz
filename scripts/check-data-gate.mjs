@@ -47,13 +47,15 @@ for (const s of seasons) {
   const vErr = v.errors ?? 0;
   const unrec = c.unreconciled?.length ?? 0;
   const unmapped = c.unmapped_espn_teams?.length ?? 0;
-  const bad = vErr + unrec + unmapped;
+  const dataWrong = c.data_wrong?.length ?? 0;
+  const bad = vErr + unrec + unmapped + dataWrong;
 
   if (bad > 0) {
     problems += bad;
     lines.push(
       `✗ ${s}: ${vErr} validation error(s), ${unrec} unreconciled team ` +
-        `mismatch(es), ${unmapped} unmapped team name(s)`,
+        `mismatch(es), ${unmapped} unmapped team name(s)` +
+        (dataWrong ? `, ${dataWrong} accepted-but-wrong (fix snapshot)` : ''),
     );
   } else {
     lines.push(`✓ ${s}: clean (internal + cross-source)`);
