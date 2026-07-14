@@ -29,11 +29,13 @@ const dataJson = JSON.stringify(teams).replace(/</g, '\\u003c');
         One block per team, in team colors, on a shared payroll scale. The
         <strong>solid</strong> block is committed salary; the
         <strong>faded</strong> block is the room left before the second apron.
-        The vertical lines are the four thresholds — <strong>salary cap</strong>,
-        <strong>luxury tax</strong>, <strong>first apron</strong>,
-        <strong>second apron</strong>. A block reaching past a line is a team
-        over that threshold. (Nearly everyone clears the cap; the tax and aprons
-        are the real dividers, so the axis starts near the cap.)
+        The vertical lines are the league's spending markers — the
+        <strong>floor</strong> (90% of the cap, which every team must clear),
+        the <strong>salary cap</strong> itself (soft — nearly everyone spends
+        past it), then the <strong>luxury tax</strong> and the
+        <strong>first</strong> and <strong>second aprons</strong>, which are the
+        real constraints. Notice the cap behaves less like a ceiling than a
+        baseline: the true floor is lower, and the true ceiling is the apron.
       </p>
     </header>
 
@@ -59,6 +61,7 @@ const dataJson = JSON.stringify(teams).replace(/</g, '\\u003c');
 
     // official 2025-26 thresholds (team-payroll level)
     const CAP = 154_647_000;
+    const FLOOR = Math.round(CAP * 0.9); // teams must spend at least 90% of the cap
     const TAX = 187_895_000;
     const APRON1 = 195_945_000;
     const APRON2 = 207_824_000;
@@ -73,7 +76,7 @@ const dataJson = JSON.stringify(teams).replace(/</g, '\\u003c');
     const plotR = W - MR;
     const bottomRows = TOP + teams.length * ROW;
 
-    const xMin = 148_000_000;
+    const xMin = 134_000_000; // low enough to show the salary floor
     const xMax = 216_000_000;
     const x = d3.scaleLinear().domain([xMin, xMax]).range([plotL, plotR]);
 
@@ -82,7 +85,8 @@ const dataJson = JSON.stringify(teams).replace(/</g, '\\u003c');
     const fmtUSD = d3.format('$,.0f');
 
     const THRESHOLDS = [
-      { v: CAP, label: 'cap', lower: false },
+      { v: FLOOR, label: 'floor', lower: false },
+      { v: CAP, label: 'cap', lower: true },
       { v: TAX, label: 'luxury tax', lower: false },
       { v: APRON1, label: '1st apron', lower: true },
       { v: APRON2, label: '2nd apron', lower: false },
@@ -189,10 +193,16 @@ const dataJson = JSON.stringify(teams).replace(/</g, '\\u003c');
     rows.selectAll('g').on('mousemove', function (evt) {
       const i = rows.selectAll('g').nodes().indexOf(this);
       const t = teams[i];
+      // the floor is a minimum: being ABOVE it is the good case
+      const floorD = t.payroll - FLOOR;
+      const floorCell = floorD >= 0
+        ? `<span class="ok">${fmtSigned(floorD)} above</span>`
+        : `<span class="no">${fmtSigned(-floorD)} under</span>`;
       tip.innerHTML =
         `<span class="tt-name">${t.name}</span>` +
         `<span class="tt-pay">${fmtUSD(t.payroll)}</span>` +
         `<table>` +
+        `<tr><td>floor</td><td>${floorCell}</td></tr>` +
         `<tr><td>cap</td><td>${room(t.payroll, CAP)}</td></tr>` +
         `<tr><td>tax</td><td>${room(t.payroll, TAX)}</td></tr>` +
         `<tr><td>1st apron</td><td>${room(t.payroll, APRON1)}</td></tr>` +
