@@ -33,6 +33,18 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
         </div>
       </a>
 
+      <a class="card" href={`${base}/nba/roster-construction`}>
+        <div class="thumb thumb--tufte" aria-hidden="true"></div>
+        <div class="meta">
+          <span class="tag">NBA · 2025-26</span>
+          <h2>Roster Construction</h2>
+          <p>
+            A Tufte-style strip plot: every team a row, every player a dot on
+            one salary scale. The quiet, data-dense counterpoint to the treemap.
+          </p>
+        </div>
+      </a>
+
       <div class="card card--soon" aria-disabled="true">
         <div class="meta">
           <span class="tag">Coming soon</span>
@@ -80,6 +92,13 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
       gap: 4px;
       background: var(--ink);
       border-bottom: 4px solid var(--ink);
+    }
+    .thumb--tufte {
+      display: block;
+      background-color: #fffff8;
+      background-image: radial-gradient(circle, #3a3730 1.1px, transparent 1.6px);
+      background-size: 15px 26px;
+      background-position: 8px 12px;
     }
     .meta { padding: 16px 18px 20px; }
     .tag {

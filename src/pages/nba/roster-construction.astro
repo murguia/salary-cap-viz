@@ -1,0 +1,326 @@
+---
+import Base from '../../layouts/Base.astro';
+import season from '../../../data/nba/2025-26.json';
+
+const dataJson = JSON.stringify(season).replace(/</g, '\\u003c');
+---
+
+<Base
+  title="NBA Roster Construction 2025-26 — Salary Cap Viz"
+  description="A Tufte-style small-multiples strip plot of 2025-26 NBA player salaries, one row per team, sorted by payroll."
+>
+  <article class="tufte">
+    <p class="kicker">NBA · 2025-26 · in the manner of Edward Tufte</p>
+    <h1>Roster construction, team by team</h1>
+    <p class="lede">
+      Each row is a team; each dot, a player, placed by salary on one shared
+      scale. Teams are sorted by total payroll. Read across a row to see how a
+      team's money is <em>distributed</em>&#8202;— a lone dot far to the right
+      is a superstar contract; a tight cluster is a balanced roster. Read down
+      a column to compare a salary tier across the league.
+    </p>
+
+    <figure class="chart">
+      <svg
+        id="chart"
+        viewBox="0 0 940 748"
+        preserveAspectRatio="xMidYMid meet"
+        role="img"
+        aria-label="Strip plot of 2025-26 NBA player salaries, one row per team, sorted by payroll"
+      ></svg>
+    </figure>
+
+    <div class="notes">
+      <p>
+        The <span class="ink">dark dot</span> on each row marks the team's
+        highest-paid player, labelled directly. Total payrolls in
+        <span class="over">muted red</span> sit above the luxury-tax line
+        ($187.9M). The tick marks along the bottom axis are a
+        <em>dot-dash</em> rug&#8202;— the marginal distribution of all
+        {season.conferences.reduce((n, c) => n + c.teams.reduce((m, t) => m + t.players.length, 0), 0)}
+        salaries in the league, dense near the minimum and thinning toward the
+        maximum. The faint vertical line marks the league-median salary. Pass
+        the cursor over any dot to name the player.
+      </p>
+    </div>
+  </article>
+
+  <div id="tooltip" class="tt" hidden></div>
+
+  <script id="strip-data" type="application/json" set:html={dataJson} is:inline></script>
+
+  <script>
+    import * as d3 from 'd3';
+
+    const raw = JSON.parse(document.getElementById('strip-data').textContent);
+
+    // 2025-26 reference thresholds (official).
+    const TAX = 187_895_000;
+
+    const teams = raw.conferences
+      .flatMap((c) => c.teams)
+      .map((t) => {
+        const players = [...t.players].sort((a, b) => b.salary - a.salary);
+        return { name: t.name, payroll: t.payroll, players, top: players[0] };
+      })
+      .sort((a, b) => b.payroll - a.payroll);
+
+    const all = teams.flatMap((t) => t.players.map((p) => p.salary));
+    const median = d3.median(all);
+    const maxSal = d3.max(all);
+    const minSal = d3.min(all);
+
+    // --- geometry (viewBox units) ---------------------------------------
+    const W = 940;
+    const ML = 186; // left gutter: team names
+    const MR = 84; // right gutter: totals
+    const TOP = 58;
+    const ROW = 21;
+    const plotL = ML;
+    const plotR = W - MR;
+    const bottomRows = TOP + teams.length * ROW;
+    const rugY = bottomRows + 30; // below the rows and the median label
+
+    const x = d3
+      .scaleLinear()
+      .domain([0, Math.ceil(maxSal / 10e6) * 10e6])
+      .range([plotL, plotR]);
+
+    const fmtM = (s) => '$' + (s / 1e6).toFixed(0) + 'M';
+    const fmtUSD = d3.format('$,.0f');
+    const lastName = (n) => n.split(' ').slice(-1)[0];
+
+    const svg = d3.select('#chart');
+
+    // --- gridlines + top axis labels (range-frame feel: light) ----------
+    const ticks = x.ticks(6);
+    const grid = svg.append('g');
+    grid
+      .selectAll('line')
+      .data(ticks)
+      .join('line')
+      .attr('class', 'grid')
+      .attr('x1', (d) => x(d))
+      .attr('x2', (d) => x(d))
+      .attr('y1', TOP - 10)
+      .attr('y2', bottomRows + 2);
+    grid
+      .selectAll('text')
+      .data(ticks)
+      .join('text')
+      .attr('class', 'axis')
+      .attr('x', (d) => x(d))
+      .attr('y', TOP - 16)
+      .attr('text-anchor', 'middle')
+      .text((d) => (d === 0 ? '$0' : fmtM(d)));
+
+    // median reference line
+    svg
+      .append('line')
+      .attr('class', 'median')
+      .attr('x1', x(median))
+      .attr('x2', x(median))
+      .attr('y1', TOP - 10)
+      .attr('y2', bottomRows + 2);
+    svg
+      .append('text')
+      .attr('class', 'reflabel')
+      .attr('x', x(median))
+      .attr('y', bottomRows + 2 + 10)
+      .attr('text-anchor', 'middle')
+      .text('median ' + fmtUSD(median));
+
+    // --- rows ------------------------------------------------------------
+    const pts = [];
+    const rows = svg.append('g');
+    teams.forEach((t, i) => {
+      const cy = TOP + i * ROW + ROW / 2;
+      const g = rows.append('g');
+
+      g.append('text')
+        .attr('class', 'team')
+        .attr('x', ML - 14)
+        .attr('y', cy)
+        .attr('text-anchor', 'end')
+        .attr('dominant-baseline', 'central')
+        .text(t.name);
+
+      t.players.forEach((p) => {
+        const px = x(p.salary);
+        g.append('circle').attr('class', 'dot').attr('cx', px).attr('cy', cy).attr('r', 2.5);
+        pts.push({ x: px, y: cy, name: p.name, team: t.name, salary: p.salary });
+      });
+
+      // emphasise + directly label the top earner
+      const tx = x(t.top.salary);
+      g.append('circle').attr('class', 'top-dot').attr('cx', tx).attr('cy', cy).attr('r', 3.3);
+      g.append('text')
+        .attr('class', 'toplabel')
+        .attr('x', tx)
+        .attr('y', cy - 6)
+        .attr('text-anchor', 'middle')
+        .text(lastName(t.top.name));
+
+      g.append('text')
+        .attr('class', 'total' + (t.payroll > TAX ? ' over' : ''))
+        .attr('x', W - 10)
+        .attr('y', cy)
+        .attr('text-anchor', 'end')
+        .attr('dominant-baseline', 'central')
+        .text(fmtM(t.payroll));
+    });
+
+    // --- dot-dash marginal rug + range-frame axis line -------------------
+    const rug = svg.append('g');
+    rug
+      .append('line')
+      .attr('class', 'frame')
+      .attr('x1', x(minSal))
+      .attr('x2', x(maxSal))
+      .attr('y1', rugY)
+      .attr('y2', rugY);
+    rug
+      .selectAll('line.rugtick')
+      .data(all)
+      .join('line')
+      .attr('class', 'rugtick')
+      .attr('x1', (d) => x(d))
+      .attr('x2', (d) => x(d))
+      .attr('y1', rugY + 1)
+      .attr('y2', rugY + 6);
+    rug
+      .selectAll('text.baxis')
+      .data(ticks)
+      .join('text')
+      .attr('class', 'axis')
+      .attr('x', (d) => x(d))
+      .attr('y', rugY + 18)
+      .attr('text-anchor', 'middle')
+      .text((d) => (d === 0 ? '$0' : fmtM(d)));
+
+    // --- hover via quadtree (keeps dots tiny; detail on demand) ----------
+    const quad = d3.quadtree().x((d) => d.x).y((d) => d.y).addAll(pts);
+    const focus = svg
+      .append('circle')
+      .attr('class', 'focus')
+      .attr('r', 5)
+      .style('display', 'none');
+    const tip = document.getElementById('tooltip');
+
+    function moveTip(evt, p) {
+      tip.innerHTML =
+        `<span class="tt-name">${p.name}</span>` +
+        `<span class="tt-team">${p.team}</span>` +
+        `<span class="tt-sal">${fmtUSD(p.salary)}</span>`;
+      tip.hidden = false;
+      const pad = 14;
+      const r = tip.getBoundingClientRect();
+      let lx = evt.clientX + pad;
+      let ly = evt.clientY + pad;
+      if (lx + r.width > window.innerWidth - 8) lx = evt.clientX - r.width - pad;
+      if (ly + r.height > window.innerHeight - 8) ly = evt.clientY - r.height - pad;
+      tip.style.left = lx + 'px';
+      tip.style.top = ly + 'px';
+    }
+
+    svg.on('mousemove', function (evt) {
+      const [mx, my] = d3.pointer(evt, this);
+      const p = quad.find(mx, my, 9);
+      if (p) {
+        focus.style('display', null).attr('cx', p.x).attr('cy', p.y);
+        moveTip(evt, p);
+      } else {
+        focus.style('display', 'none');
+        tip.hidden = true;
+      }
+    });
+    svg.on('mouseleave', () => {
+      focus.style('display', 'none');
+      tip.hidden = true;
+    });
+  </script>
+
+  <style>
+    .tufte {
+      background: #fffff8;
+      color: #111;
+      font-family: Palatino, 'Palatino Linotype', 'Book Antiqua', Georgia, serif;
+      max-width: 1080px;
+      margin: -32px auto 0; /* pull up under the site header */
+      padding: 40px 40px 8px;
+    }
+    .tufte .kicker {
+      font-size: 12px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: #8a8266;
+      margin: 0 0 6px;
+    }
+    .tufte h1 {
+      font-weight: 400;
+      font-size: clamp(28px, 4vw, 40px);
+      line-height: 1.1;
+      letter-spacing: -0.01em;
+      margin: 0 0 14px;
+    }
+    .tufte .lede {
+      font-size: 18px;
+      line-height: 1.5;
+      color: #33312e;
+      max-width: 42em;
+      margin: 0 0 22px;
+    }
+    .tufte em { font-style: italic; }
+    .chart { margin: 0; }
+    #chart { width: 100%; height: auto; display: block; }
+
+    /* SVG element styling */
+    .tufte svg text { font-family: Palatino, 'Palatino Linotype', Georgia, serif; }
+    .team { font-size: 11.5px; fill: #111; }
+    .total { font-size: 11.5px; fill: #6b6659; }
+    .total.over { fill: #8a2b22; }
+    .toplabel { font-size: 8.5px; font-style: italic; fill: #4a463d; }
+    .axis { font-size: 10px; fill: #8a8266; }
+    .reflabel { font-size: 9.5px; font-style: italic; fill: #a39a78; }
+    .dot { fill: #3a3730; opacity: 0.42; }
+    .top-dot { fill: #111; }
+    .grid { stroke: #ece7d6; stroke-width: 1; shape-rendering: crispEdges; }
+    .median { stroke: #cfc59b; stroke-width: 1; stroke-dasharray: 2 3; }
+    .frame { stroke: #6b6659; stroke-width: 1; shape-rendering: crispEdges; }
+    .rugtick { stroke: #3a3730; opacity: 0.3; stroke-width: 1; }
+    .focus { fill: none; stroke: #8a2b22; stroke-width: 1.5; }
+
+    .notes {
+      border-top: 1px solid #e6e0cf;
+      margin-top: 8px;
+      padding-top: 14px;
+    }
+    .notes p {
+      font-size: 13.5px;
+      line-height: 1.55;
+      color: #4a463d;
+      max-width: 44em;
+    }
+    .ink { color: #111; font-weight: 600; }
+    .over { color: #8a2b22; }
+
+    .tt {
+      position: fixed;
+      z-index: 10;
+      pointer-events: none;
+      background: #fffff8;
+      color: #111;
+      border: 1px solid #111;
+      padding: 6px 9px;
+      font-family: Palatino, 'Palatino Linotype', Georgia, serif;
+      box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.12);
+      display: flex;
+      flex-direction: column;
+      max-width: 240px;
+    }
+    .tt[hidden] { display: none; }
+    .tt-name { font-size: 14px; font-weight: 600; }
+    .tt-team { font-size: 12px; font-style: italic; color: #6b6659; }
+    .tt-sal { font-size: 14px; margin-top: 2px; }
+  </style>
+</Base>
